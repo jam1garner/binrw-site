@@ -20,5 +20,6 @@ highlight_code = true
 juice_logo_name = "binrw"
 juice_logo_path = "binrw.svg"
 juice_extra_menu = [
+    { title = "Documentation", link = "https://docs.rs/binrw" },
     { title = "Github", link = "https://github.com/jam1garner/binrw"}
 ]
