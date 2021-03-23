@@ -1,0 +1,51 @@
+.heading-text {
+  font-family: "Fira Sans", sans-serif;
+  font-size: 32px;
+  font-weight: 600;
+  padding: 10px 0 25px 0;
+  color: var(--primary-text-color);
+}
+
+.content > h1 {
+  color: var(--secondary-text-color);
+}
+
+main > h1 {
+  font-family: "Fira Sans", sans-serif;
+  font-size: 25px;
+  font-weight: 500;
+  color: var(--secondary-text-color);
+  border-left: var(--primary-color) 8px solid;
+  padding-left: 10px;
+}
+
+.content > h2 {
+  font-family: "Fira Sans", sans-serif;
+  font-size: 20px;
+  font-weight: 500;
+  color: var(--secondary-text-color);
+}
+
+main > .text {
+  font-family: "Fira Sans", sans-serif;
+  font-size: 18px;
+  font-weight: 400;
+  line-height: 26px;
+  letter-spacing: 0.2px;
+  color: var(--secondary-text-color);
+}
+
+.subtext {
+  font-family: "Fira Sans", sans-serif;
+  font-size: 16px;
+  font-weight: 400;
+  letter-spacing: 0.1px;
+}
+
+.content code {
+    background-color: inherit;
+}
+
+.content a {
+    color: var(--primary-color),
+}

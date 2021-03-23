@@ -1,0 +1,56 @@
+{% extends "juice/templates/index.html" %}
+
+{% block head %}
+    <link rel="stylesheet" href="{{ get_url(path="text.css") }}">
+{% endblock head %}
+
+{% block footer %}
+    <footer>
+        <small class="subtext">
+            <a href="https://jam1.re">jam1garner</a> © 2021
+        </small>
+    </footer>
+{% endblock footer %}
+
+{% block hero %}
+<script async defer src="https://buttons.github.io/buttons.js"></script>
+<section class="text-center">
+    <h1 class="heading-text" style="font-size: 50px">
+        Read and Write Data With Declarative ✨Macro&nbsp;Magic✨
+    </h1>
+    <h3 class="title-text">
+        <b>binrw</b> makes binary parsers and serializers easy to write, read, and maintain.
+    </h3>
+    <div>
+        <a class="github-button" href="https://github.com/jam1garner/binrw" data-size="large" data-show-count="true"
+           aria-label="Star binrw on GitHub">Star</a>
+        <a class="github-button" href="https://github.com/jam1garner/binrw/fork" data-size="large"
+           data-show-count="true" aria-label="Fork jam1garner/binrw on GitHub">Fork</a>
+    </div>
+</section>
+<img class="hero-image" style="width: 50%" src="{{ get_url(path="binrw.svg") }}">
+
+<div class="explore-more text"
+    onclick="document.getElementById('features').scrollIntoView({behavior: 'smooth'})">
+    Explore More ⇩
+</div>
+<style>
+    .hero section {
+        padding: 0 5rem;
+    }
+    @media screen and (max-width: 768px) {
+        .hero section {
+            padding: 0 2rem;
+        }
+
+        .hero-image {
+            display: none
+        }
+    }
+</style>
+{% endblock hero %}
+
+{% block content %}
+<div id="features" class="heading-text-dark">Overview</div>
+{{ section.content | safe }}
+{% endblock content %}
