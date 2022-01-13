@@ -42,8 +42,15 @@ main > .text {
   letter-spacing: 0.1px;
 }
 
-.content code {
+.content > pre > code {
     background-color: inherit;
+    color: var(--primary-text-color);
+    line-height: 1.7em;
+}
+
+.content code {
+    background-color: lightgray;
+    padding: 0;
 }
 
 .content a {

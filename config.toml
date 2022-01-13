@@ -12,14 +12,13 @@ theme = "juice"
 title = "binrw"
 
 [markdown]
-# Whether to do syntax highlighting
-# Theme can be customised by setting the `highlight_theme` variable to a theme supported by Zola
 highlight_code = true
+highlight_theme = "ayu-dark"
 
 [extra]
 juice_logo_name = "binrw"
 juice_logo_path = "binrw.svg"
 juice_extra_menu = [
     { title = "Documentation", link = "https://docs.rs/binrw" },
-    { title = "Github", link = "https://github.com/jam1garner/binrw"}
+    { title = "Github", link = "https://github.com/jam1garner/binrw"},
 ]

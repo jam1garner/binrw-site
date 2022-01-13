@@ -1,6 +1,7 @@
 +++
 title = "binrw"
 sort_by = "weight"
+insert_anchor_links = "none"
 +++
 
 # binrw
