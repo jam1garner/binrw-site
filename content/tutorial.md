@@ -192,3 +192,70 @@ enum Compression {
 ```
 
 And, like typical [C-like enums](https://doc.rust-lang.org/rust-by-example/custom_types/enum/c_like.html) you don't actually have to specify each number. The rules for their relationship to numeric values is identical, with the first value defaulting to zero unless otherwise specified, each variant increasing by one unless manually specified.
+
+
+## Generics
+
+Generics are one of the ways to reuse logic when reading and writing similar structures. Generics work well for defining custom container or pointer types like `MySpecialArray<T>` or `RelativePointer<Pointer, Data>`.
+
+Suppose we're processing some 3D shapes where each shape has a set coordinate type and number of points. Using generics, we can define a single `Vec3<T>` for the XYZ coordinates. Deriving `BinRead` and `BinWrite` only works if binrw knows how to read and write `T`. Our coordinates don't need any arguments for this simple case, so we'll write `Args = ()`.
+
+```rust
+#[binrw]
+struct Vec3<T>
+where
+    T: BinRead<Args = ()> + BinWrite<Args = ()>,
+//     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+//     T needs bounds to derive BinRead/BinWrite
+{
+    x: T,
+    y: T,
+    z: T,
+}
+```
+
+We can use our `Vec3<T>` type to define some shapes. In this case, the structs are identical other than the length of the points array.
+
+```rust
+#[binrw]
+struct Line {
+    points: [Vec3<f32>; 2],
+}
+
+#[binrw]
+struct Triangle {
+    points: [Vec3<f32>; 3],
+}
+
+#[binrw]
+struct Quadrilateral {
+    points: [Vec3<f32>; 4],
+}
+```
+
+Rather than typing out a new struct for each coordinate type and number of points, we can also use const generics to create a single generic type `Shape` .
+
+```rust
+#[binrw]
+struct Shape<T, const N: usize>
+where
+    T: BinRead<Args = ()> + BinWrite<Args = ()>,
+{
+    points: [Vec3<T>; N],
+}
+```
+
+Type names with many generic parameters like `Shape<i8, 4>` can be hard to understand, so we'll create type aliases for recognizable shapes. Composing generic types like this can greatly reduce the amount of code needed to define more complicated types.
+ 
+
+```rust
+type Line = Shape<f32, 2>;
+type Triangle = Shape<f64, 3>;
+type Quadrilateral<T> = Shape<T, 4>;
+
+#[binrw]
+struct House2D {
+    walls: Quadrilateral<f64>,
+    roof: Triangle
+}
+```
