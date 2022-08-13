@@ -1,0 +1,3 @@
+User-agent: *
+Allow: /
+Sitemap: https://binrw.rs/sitemap.xml

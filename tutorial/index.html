@@ -1,0 +1,358 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <title>Tutorial | binrw </title>
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <style>
+    :root {
+        /* Primary theme color */
+        --primary-color: #386DAD;
+        /* Primary theme text color */
+        --primary-text-color: #FFF;
+        /* Primary theme link color */
+        --primary-link-color: #F9BB2D;
+        /* Secondary color: the background body color */
+        --secondary-color: #fcfaf6;
+        --secondary-text-color: #303030;
+        /* Highlight text color of table of content */
+        --toc-highlight-text-color: #d46e13;
+    }
+
+    .heading-text-dark {
+      font-family: "Fira Sans", sans-serif;
+      font-size: 32px;
+      font-weight: 600;
+      padding: 10px 0 25px 0;
+      color: var(--secondary-text-color);
+    }
+</style>
+
+    <link href="https://fonts.googleapis.com/css?family=Alfa+Slab+One&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css?family=Fira+Sans:400,500,600&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="/normalize.css">
+    <link rel="stylesheet" href="https://binrw.rs/juice.css">
+    
+    <link rel="stylesheet" href="https://binrw.rs/text.css">
+    <link rel="stylesheet" href="https://binrw.rs/grid.css">
+
+</head>
+
+<body>
+    
+<header class="box-shadow">
+    
+
+<a href="https:&#x2F;&#x2F;binrw.rs&#x2F;">
+    <div class="logo">
+        <img src="https://binrw.rs/binrw.svg" alt="logo">
+        binrw
+    </div>
+</a>
+
+<nav>
+    
+    <a class="nav-item subtitle-text" href="https:&#x2F;&#x2F;binrw.rs&#x2F;tutorial&#x2F;">Tutorial</a>
+    
+    <a class="nav-item subtitle-text" href="https:&#x2F;&#x2F;binrw.rs&#x2F;community&#x2F;">Community&#x2F;Showcase</a>
+    
+    
+        
+        <a class="nav-item subtitle-text" href="https:&#x2F;&#x2F;docs.rs&#x2F;binrw">Documentation</a>
+        
+        <a class="nav-item subtitle-text" href="https:&#x2F;&#x2F;github.com&#x2F;jam1garner&#x2F;binrw">Github</a>
+        
+    
+</nav>
+
+</header>
+
+
+    <main>
+        
+        
+        
+        
+        
+        <div class="toc">
+            <div class="toc-sticky">
+                
+                <div class="toc-item">
+                    <a class="subtext" href="https://binrw.rs/tutorial/#tutorial">Tutorial</a>
+                </div>
+                
+                
+                <div class="toc-item-child">
+                    <a class="subtext" href="https://binrw.rs/tutorial/#introduction"><small>- Introduction</small></a>
+                </div>
+                
+                <div class="toc-item-child">
+                    <a class="subtext" href="https://binrw.rs/tutorial/#the-simplest-parser"><small>- The Simplest Parser</small></a>
+                </div>
+                
+                <div class="toc-item-child">
+                    <a class="subtext" href="https://binrw.rs/tutorial/#lists"><small>- Lists</small></a>
+                </div>
+                
+                <div class="toc-item-child">
+                    <a class="subtext" href="https://binrw.rs/tutorial/#enums"><small>- Enums</small></a>
+                </div>
+                
+                <div class="toc-item-child">
+                    <a class="subtext" href="https://binrw.rs/tutorial/#c-like-enums"><small>- C-like Enums</small></a>
+                </div>
+                
+                <div class="toc-item-child">
+                    <a class="subtext" href="https://binrw.rs/tutorial/#generics"><small>- Generics</small></a>
+                </div>
+                
+                
+                
+            </div>
+        </div>
+        
+        
+
+        <div class="content text">
+            
+<div class="heading-text"></div>
+<h1 id="tutorial">Tutorial</h1>
+<h2 id="introduction">Introduction</h2>
+<p>Before actually introducing how to use binrw, I'd like to introduce a little terminology as well as provide some direction regarding how to find things in the binrw documentation.</p>
+<p>First off, binrw uses heavy use of Rust attributes, which look something like:</p>
+<pre data-lang="rust" style="background-color:#0f1419;color:#bfbab0;" class="language-rust "><code class="language-rust" data-lang="rust"><span style="color:#bfbab0cc;">#</span><span>[</span><span style="color:#ffb454;">br</span><span>(magic </span><span style="color:#f29668;">= </span><span style="color:#ff7733;">b</span><span style="color:#c2d94c;">&quot;PK&quot;</span><span>)] </span><span style="font-style:italic;color:#5c6773;">// &lt;--- attribute
+</span><span style="color:#ff7733;">struct </span><span style="color:#59c2ff;">ZipFile </span><span>{
+</span><span>    </span><span style="font-style:italic;color:#5c6773;">// ...
+</span><span>}
+</span></code></pre>
+<p>binrw makes heavy use of attributes in order to describe modifications to parsing behavior.
+Each item inside the <code>#[br(...)]</code> attribute is referred to as a &quot;directive&quot;. Occasionally these
+may also be referred to as &quot;attributes&quot; just due to the fact that, ignoring the <code>br</code> (binread) 
+specifier, a lone directive is effectively an attribute.</p>
+<pre data-lang="rust" style="background-color:#0f1419;color:#bfbab0;" class="language-rust "><code class="language-rust" data-lang="rust"><span style="color:#bfbab0cc;">#</span><span>[</span><span style="color:#ffb454;">br</span><span>(magic </span><span style="color:#f29668;">= </span><span style="color:#ff7733;">b</span><span style="color:#c2d94c;">&quot;PK&quot;</span><span>)]
+</span><span style="font-style:italic;color:#5c6773;">//   ^^^^^^^^^^^^^
+</span><span style="font-style:italic;color:#5c6773;">//     directive
+</span></code></pre>
+<p>Since attributes are such an important part of binrw as a language, they are organized into their
+own section, separated into <a href="https://docs.rs/binrw/latest/binrw/attribute/read/index.html">directives used while reading</a> and <a href="https://docs.rs/binrw/latest/binrw/attribute/write/index.html">directives used while writing</a>.</p>
+<p>Since those pages are so commonly referenced, links to them have been included at the beginning of the top-level
+documentation of the crate:</p>
+<p><img src="https://user-images.githubusercontent.com/8260240/149064578-240e583f-b894-4adc-986e-6f95fb846087.png" alt="A table labelled &quot;quick links&quot; including #[br], #[bw], and a few other options is shown" /></p>
+<p>The <code>#[br]</code> link takes you to the reading docs, and the <code>#[bw]</code> link takes you to the writing docs.</p>
+<h2 id="the-simplest-parser">The Simplest Parser</h2>
+<p>To start us off we have the basics. The simplest case in parsing is to take a couple fixed-width types and parse them one after another. Even in complicated formats you'll typically see plenty of this, so binrw tries to keep this as simple as possible:</p>
+<pre data-lang="rust" style="background-color:#0f1419;color:#bfbab0;" class="language-rust "><code class="language-rust" data-lang="rust"><span style="color:#ff7733;">use </span><span>binrw</span><span style="color:#f29668;">::</span><span>binrw</span><span style="color:#bfbab0cc;">;
+</span><span>
+</span><span style="color:#bfbab0cc;">#</span><span>[</span><span style="color:#ffb454;">binrw</span><span>]
+</span><span style="color:#ff7733;">struct </span><span style="color:#59c2ff;">Vec3 </span><span>{
+</span><span>    x</span><span style="color:#bfbab0cc;">: </span><span style="color:#ff7733;">f32</span><span>,
+</span><span>    y</span><span style="color:#bfbab0cc;">: </span><span style="color:#ff7733;">f32</span><span>,
+</span><span>    z</span><span style="color:#bfbab0cc;">: </span><span style="color:#ff7733;">f32</span><span>,
+</span><span>}
+</span></code></pre>
+<p>And we've now finished writing our first parser and writer! Let's try actually using it:</p>
+<pre data-lang="rust" style="background-color:#0f1419;color:#bfbab0;" class="language-rust "><code class="language-rust" data-lang="rust"><span style="color:#ff7733;">use </span><span>binrw</span><span style="color:#f29668;">::</span><span>{BinReaderExt</span><span style="color:#bfbab0cc;">,</span><span> BinWriterExt}</span><span style="color:#bfbab0cc;">; </span><span style="font-style:italic;color:#5c6773;">// extension traits for use with readers and writers
+</span><span style="color:#ff7733;">use </span><span>binrw</span><span style="color:#f29668;">::</span><span>io</span><span style="color:#f29668;">::</span><span>{Cursor</span><span style="color:#bfbab0cc;">,</span><span> Seek</span><span style="color:#bfbab0cc;">,</span><span> SeekFrom}</span><span style="color:#bfbab0cc;">; </span><span style="font-style:italic;color:#5c6773;">// A no_std reimplementation of std::io
+</span><span>
+</span><span style="color:#ff7733;">let</span><span> position </span><span style="color:#f29668;">=</span><span> Vec3 { x</span><span style="color:#bfbab0cc;">: </span><span style="color:#f29718;">3.0</span><span style="color:#bfbab0cc;">,</span><span> y</span><span style="color:#bfbab0cc;">: </span><span style="color:#f29718;">1.0</span><span style="color:#bfbab0cc;">,</span><span> z</span><span style="color:#bfbab0cc;">: </span><span style="color:#f29718;">0.0 </span><span>}</span><span style="color:#bfbab0cc;">;
+</span><span style="color:#ff7733;">let mut</span><span> writer </span><span style="color:#f29668;">= </span><span>Cursor</span><span style="color:#f29668;">::</span><span>new(</span><span style="font-style:italic;color:#39bae6;">Vec</span><span style="color:#f29668;">::</span><span>new())</span><span style="color:#bfbab0cc;">;
+</span><span>
+</span><span style="font-style:italic;color:#5c6773;">// Write our position to the Vec with little endian (le) byteorder
+</span><span>writer</span><span style="color:#f29668;">.</span><span style="color:#f07178;">write_le</span><span>(</span><span style="color:#f29668;">&amp;</span><span>position)</span><span style="color:#f29668;">.</span><span style="color:#f07178;">unwrap</span><span>()</span><span style="color:#bfbab0cc;">;
+</span><span>
+</span><span style="font-style:italic;color:#5c6773;">// Read our position back out of our Vec
+</span><span style="color:#ff7733;">let mut</span><span> reader </span><span style="color:#f29668;">=</span><span> writer</span><span style="color:#bfbab0cc;">;
+</span><span>reader</span><span style="color:#f29668;">.</span><span style="color:#f07178;">seek</span><span>(SeekFrom</span><span style="color:#f29668;">::</span><span>Start(</span><span style="color:#f29718;">0</span><span>))</span><span style="color:#f29668;">.</span><span style="color:#f07178;">unwrap</span><span>()</span><span style="color:#bfbab0cc;">;
+</span><span style="color:#ff7733;">let</span><span> pos</span><span style="color:#bfbab0cc;">:</span><span> Vec3 </span><span style="color:#f29668;">=</span><span> reader</span><span style="color:#f29668;">.</span><span style="color:#f07178;">read_le</span><span>()</span><span style="color:#f29668;">.</span><span style="color:#f07178;">unwrap</span><span>()</span><span style="color:#bfbab0cc;">;
+</span><span>
+</span><span style="color:#f07178;">println!</span><span>(</span><span style="color:#c2d94c;">&quot;Position: </span><span style="color:#f29718;">{}</span><span style="color:#c2d94c;">, </span><span style="color:#f29718;">{}</span><span style="color:#c2d94c;">, </span><span style="color:#f29718;">{}</span><span style="color:#c2d94c;">&quot;</span><span style="color:#bfbab0cc;">,</span><span> pos</span><span style="color:#f29668;">.</span><span>x</span><span style="color:#bfbab0cc;">,</span><span> pos</span><span style="color:#f29668;">.</span><span>y</span><span style="color:#bfbab0cc;">,</span><span> pos</span><span style="color:#f29668;">.</span><span>z)</span><span style="color:#bfbab0cc;">;
+</span></code></pre>
+<p>binrw provides extension traits in order to enable taking existing types implementing <code>std::io::Read</code> or
+<code>std::io::Write</code> and use them with binrw. See <a href="https://docs.rs/binrw/latest/binrw/trait.BinReaderExt.html"><code>BinReaderExt</code></a> and <a href="https://docs.rs/binrw/latest/binrw/trait.BinWriterExt.html"><code>BinWriterExt</code></a> for more info.</p>
+<p>For <code>#![no_std]</code> projects, <code>binrw::io</code> is a drop-in replacement for <code>std::io</code>. In fact, it's encouraged to import from these locations <em>regardless</em> in binrw projects as, if the <code>std</code> feature is enabled, the traits are just re-exported from the standard library.</p>
+<h2 id="lists">Lists</h2>
+<p>The thing is, just parsing fixed-sized data is rarely enough for most formats. So the next most common technique in file formats is items in a list with a count of how many items are in the list.</p>
+<p>The way this is handled in binrw is using the <code>count</code> directive:</p>
+<pre data-lang="rust" style="background-color:#0f1419;color:#bfbab0;" class="language-rust "><code class="language-rust" data-lang="rust"><span style="color:#bfbab0cc;">#</span><span>[</span><span style="color:#ffb454;">binread</span><span>]
+</span><span style="color:#ff7733;">struct </span><span style="color:#59c2ff;">Mesh </span><span>{
+</span><span>    vertex_count</span><span style="color:#bfbab0cc;">: </span><span style="color:#ff7733;">u32</span><span>,
+</span><span>
+</span><span>    </span><span style="color:#bfbab0cc;">#</span><span>[</span><span style="color:#ffb454;">br</span><span>(count </span><span style="color:#f29668;">=</span><span> vertex_count + 1)]
+</span><span>    vertices</span><span style="color:#bfbab0cc;">: </span><span style="font-style:italic;color:#39bae6;">Vec</span><span>&lt;Vec3&gt;,
+</span><span>}
+</span></code></pre>
+<p>(Note: <code>#[binread]</code> and <code>#[binwrite]</code> are also provided for when you only need one, while <code>#[binrw]</code> does both)</p>
+<p>The count directive can reference any fields which come before it, and arbitrary expressions are allowed on the
+right hand side. For user convenience, the expression may evaluate to any type which can be cast to <code>usize</code>.</p>
+<p>However the above only support reading. In order to make it support writing, we'll need to add some additional annotations to tell binrw how to take the length of the vertices field in order to use it as the value for <code>vertex_count</code> when writing:</p>
+<pre data-lang="rust" style="background-color:#0f1419;color:#bfbab0;" class="language-rust "><code class="language-rust" data-lang="rust"><span style="color:#bfbab0cc;">#</span><span>[</span><span style="color:#ffb454;">binrw</span><span>]
+</span><span style="color:#ff7733;">struct </span><span style="color:#59c2ff;">Mesh </span><span>{
+</span><span>    </span><span style="color:#bfbab0cc;">#</span><span>[</span><span style="color:#ffb454;">bw</span><span>(calc </span><span style="color:#f29668;">=</span><span> (vertices.</span><span style="color:#ffb454;">len</span><span>() - 1) </span><span style="color:#ffb454;">as u32</span><span>)]
+</span><span>    vertex_count</span><span style="color:#bfbab0cc;">: </span><span style="color:#ff7733;">u32</span><span>,
+</span><span>
+</span><span>    </span><span style="color:#bfbab0cc;">#</span><span>[</span><span style="color:#ffb454;">br</span><span>(count </span><span style="color:#f29668;">=</span><span> vertex_count + 1)]
+</span><span>    vertices</span><span style="color:#bfbab0cc;">: </span><span style="font-style:italic;color:#39bae6;">Vec</span><span>&lt;Vec3&gt;,
+</span><span>}
+</span></code></pre>
+<p>Here we mix a <code>#[br]</code> attribute to describe the reading behavior with a <code>#[bw]</code> attribute to describe writing behavior. On occasion you might want to apply the same attribute to both (such as when specifying endianess). For that purpose there is a <code>#[brw(...)]</code> attribute.</p>
+<table><thead><tr><th align="center"></th></tr></thead><tbody>
+<tr><td align="center"><a href="https://gist.github.com/jam1garner/966a9a0f3ba765fc92d8d58c340aa5da"><em>Gist of the example code up to this point</em></a></td></tr>
+</tbody></table>
+<h2 id="enums">Enums</h2>
+<p>binrw features enums in two forms: as sum types (enums with data) or as a limited set of values (C-style enums).</p>
+<p>By default, enum variants are parsed in-order, moving from one to the next, parsing each until an error occurs. Typically, this is done via assertions. binrw has two main forms of assertions included: the <a href="https://docs.rs/binrw/latest/binrw/attribute/read/index.html#assert"><code>assert</code> directive</a>, which allows providing a condition that must hold true in order, otherwise an error is created. The other form is the <a href="https://docs.rs/binrw/latest/binrw/attribute/read/index.html#magic"><code>magic</code> directive</a>, which is a constant value that is checked to match a value in the reader being parsed from. This is commonly used for reading &quot;file magics&quot;, or a fixed set of bytes included at the start of the file to confirm that the data is that of the expected file type.</p>
+<p>For example, the following can be used to ensure the first 4 bytes of a file are &quot;MODL&quot;:</p>
+<pre data-lang="rust" style="background-color:#0f1419;color:#bfbab0;" class="language-rust "><code class="language-rust" data-lang="rust"><span style="color:#bfbab0cc;">#</span><span>[</span><span style="color:#ffb454;">binrw</span><span>]
+</span><span style="color:#bfbab0cc;">#</span><span>[</span><span style="color:#ffb454;">brw</span><span>(magic </span><span style="color:#f29668;">= </span><span style="color:#ff7733;">b</span><span style="color:#c2d94c;">&quot;MODL&quot;</span><span>)]
+</span><span style="color:#ff7733;">struct </span><span style="color:#59c2ff;">ModelFile </span><span>{
+</span><span>    </span><span style="font-style:italic;color:#5c6773;">// ...
+</span><span>}
+</span></code></pre>
+<p>When using magic with <code>#[brw(...)]</code>, the constant will also be written in the BinWrite implementation, making the operation capable of round-tripping without additional effort. Magics can also be integer literals (with type specified, such as <code>0x1234_u32</code>).</p>
+<pre data-lang="rust" style="background-color:#0f1419;color:#bfbab0;" class="language-rust "><code class="language-rust" data-lang="rust"><span style="color:#bfbab0cc;">#</span><span>[</span><span style="color:#ffb454;">binread</span><span>]
+</span><span style="color:#ff7733;">enum </span><span style="color:#59c2ff;">Value </span><span>{
+</span><span>    </span><span style="color:#bfbab0cc;">#</span><span>[</span><span style="color:#ffb454;">br</span><span>(magic </span><span style="color:#f29668;">=</span><span> 0u8)] </span><span style="color:#f29718;">U16</span><span>(</span><span style="color:#ff7733;">u16</span><span>)</span><span style="color:#bfbab0cc;">,
+</span><span>    </span><span style="color:#bfbab0cc;">#</span><span>[</span><span style="color:#ffb454;">br</span><span>(magic </span><span style="color:#f29668;">=</span><span> 1u8)] </span><span style="color:#f29718;">U32</span><span>(</span><span style="color:#ff7733;">u32</span><span>)</span><span style="color:#bfbab0cc;">,
+</span><span>    </span><span style="color:#bfbab0cc;">#</span><span>[</span><span style="color:#ffb454;">br</span><span>(magic </span><span style="color:#f29668;">=</span><span> 2u8)] </span><span style="font-style:italic;color:#39bae6;">String </span><span>{
+</span><span>        len</span><span style="color:#bfbab0cc;">: </span><span style="color:#ff7733;">u32</span><span style="color:#bfbab0cc;">,
+</span><span>
+</span><span>        </span><span style="color:#bfbab0cc;">#</span><span>[</span><span style="color:#ffb454;">br</span><span>(count </span><span style="color:#f29668;">=</span><span> len)]
+</span><span>        bytes</span><span style="color:#bfbab0cc;">: </span><span style="font-style:italic;color:#39bae6;">Vec</span><span>&lt;</span><span style="color:#ff7733;">u8</span><span>&gt;</span><span style="color:#bfbab0cc;">,
+</span><span>    }</span><span style="color:#bfbab0cc;">,
+</span><span>}
+</span></code></pre>
+<p>For example, if we apply this parser (big endian) to the following data:</p>
+<pre style="background-color:#0f1419;color:#bfbab0;"><code><span>01 00 00 00 05
+</span></code></pre>
+<p>The steps it'd take is:</p>
+<ol>
+<li>Read a single byte from the reader</li>
+<li>Check if that byte is 0. Since it isn't, move on.</li>
+<li>Check if that byte is 1. Since it is, continue parsing the Value::U32 variant.</li>
+<li>Take 4 bytes from the stream, convert to a u32, construct a Value::U32 from it.</li>
+</ol>
+<h2 id="c-like-enums">C-like Enums</h2>
+<p>The other form of enums is C-like enums. They have no associated data, but are less verbose to write. While one <em>could</em> write such an enum like this:</p>
+<pre data-lang="rust" style="background-color:#0f1419;color:#bfbab0;" class="language-rust "><code class="language-rust" data-lang="rust"><span style="color:#bfbab0cc;">#</span><span>[</span><span style="color:#ffb454;">binrw</span><span>]
+</span><span style="color:#ff7733;">enum </span><span style="color:#59c2ff;">Compression </span><span>{
+</span><span>    </span><span style="color:#bfbab0cc;">#</span><span>[</span><span style="color:#ffb454;">brw</span><span>(magic </span><span style="color:#f29668;">=</span><span> 0u8)] </span><span style="font-style:italic;color:#39bae6;">None</span><span style="color:#bfbab0cc;">,
+</span><span>    </span><span style="color:#bfbab0cc;">#</span><span>[</span><span style="color:#ffb454;">brw</span><span>(magic </span><span style="color:#f29668;">=</span><span> 1u8)] Zlib</span><span style="color:#bfbab0cc;">,
+</span><span>    </span><span style="color:#bfbab0cc;">#</span><span>[</span><span style="color:#ffb454;">brw</span><span>(magic </span><span style="color:#f29668;">=</span><span> 2u8)] Gzip</span><span style="color:#bfbab0cc;">,
+</span><span>    </span><span style="color:#bfbab0cc;">#</span><span>[</span><span style="color:#ffb454;">brw</span><span>(magic </span><span style="color:#f29668;">=</span><span> 3u8)] Lzma</span><span style="color:#bfbab0cc;">,
+</span><span>}
+</span></code></pre>
+<p>But it's a bit repetitive, especially if you already are specifying the values for FFI (as then you'd be specifying the value twice!). So instead, binrw has a shorthand for this, with the added benefit that it guarantees an efficient parser generation:</p>
+<pre data-lang="rust" style="background-color:#0f1419;color:#bfbab0;" class="language-rust "><code class="language-rust" data-lang="rust"><span style="color:#bfbab0cc;">#</span><span>[</span><span style="color:#ffb454;">binrw</span><span>]
+</span><span style="color:#bfbab0cc;">#</span><span>[</span><span style="color:#ffb454;">brw</span><span>(</span><span style="color:#ffb454;">repr</span><span>(u8))]
+</span><span style="color:#ff7733;">enum </span><span style="color:#59c2ff;">Compression </span><span>{
+</span><span>    </span><span style="font-style:italic;color:#39bae6;">None </span><span style="color:#f29668;">= </span><span style="color:#f29718;">0</span><span style="color:#bfbab0cc;">,
+</span><span>    Zlib </span><span style="color:#f29668;">= </span><span style="color:#f29718;">1</span><span style="color:#bfbab0cc;">,
+</span><span>    Gzip </span><span style="color:#f29668;">= </span><span style="color:#f29718;">2</span><span style="color:#bfbab0cc;">,
+</span><span>    Lzma </span><span style="color:#f29668;">= </span><span style="color:#f29718;">3</span><span style="color:#bfbab0cc;">,
+</span><span>}
+</span></code></pre>
+<p>And, like typical <a href="https://doc.rust-lang.org/rust-by-example/custom_types/enum/c_like.html">C-like enums</a> you don't actually have to specify each number. The rules for their relationship to numeric values is identical, with the first value defaulting to zero unless otherwise specified, each variant increasing by one unless manually specified.</p>
+<h2 id="generics">Generics</h2>
+<p>Generics are one of the ways to reuse logic when reading and writing similar structures. Generics work well for defining custom container or pointer types like <code>MySpecialArray&lt;T&gt;</code> or <code>RelativePointer&lt;Pointer, Data&gt;</code>.</p>
+<p>Suppose we're processing some 3D shapes where each shape has a set coordinate type and number of points. Using generics, we can define a single <code>Vec3&lt;T&gt;</code> for the XYZ coordinates. Deriving <code>BinRead</code> and <code>BinWrite</code> only works if binrw knows how to read and write <code>T</code>. Our coordinates don't need any arguments for this simple case, so we'll write <code>Args = ()</code>.</p>
+<pre data-lang="rust" style="background-color:#0f1419;color:#bfbab0;" class="language-rust "><code class="language-rust" data-lang="rust"><span style="color:#bfbab0cc;">#</span><span>[</span><span style="color:#ffb454;">binrw</span><span>]
+</span><span style="color:#ff7733;">struct </span><span style="color:#59c2ff;">Vec3</span><span>&lt;T&gt;
+</span><span>where
+</span><span>    T: BinRead&lt;Args = ()</span><span style="color:#f29668;">&gt; + </span><span>BinWrite&lt;Args = ()&gt;</span><span style="color:#bfbab0cc;">,
+</span><span style="font-style:italic;color:#5c6773;">//     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+</span><span style="font-style:italic;color:#5c6773;">//     T needs bounds to derive BinRead/BinWrite
+</span><span>{
+</span><span>    x</span><span style="color:#bfbab0cc;">:</span><span> T</span><span style="color:#bfbab0cc;">,
+</span><span>    y</span><span style="color:#bfbab0cc;">:</span><span> T</span><span style="color:#bfbab0cc;">,
+</span><span>    z</span><span style="color:#bfbab0cc;">:</span><span> T</span><span style="color:#bfbab0cc;">,
+</span><span>}
+</span></code></pre>
+<p>We can use our <code>Vec3&lt;T&gt;</code> type to define some shapes. In this case, the structs are identical other than the length of the points array.</p>
+<pre data-lang="rust" style="background-color:#0f1419;color:#bfbab0;" class="language-rust "><code class="language-rust" data-lang="rust"><span style="color:#bfbab0cc;">#</span><span>[</span><span style="color:#ffb454;">binrw</span><span>]
+</span><span style="color:#ff7733;">struct </span><span style="color:#59c2ff;">Line </span><span>{
+</span><span>    points</span><span style="color:#bfbab0cc;">:</span><span> [Vec3&lt;</span><span style="color:#ff7733;">f32</span><span>&gt;; 2],
+</span><span>}
+</span><span>
+</span><span style="color:#bfbab0cc;">#</span><span>[</span><span style="color:#ffb454;">binrw</span><span>]
+</span><span style="color:#ff7733;">struct </span><span style="color:#59c2ff;">Triangle </span><span>{
+</span><span>    points</span><span style="color:#bfbab0cc;">:</span><span> [Vec3&lt;</span><span style="color:#ff7733;">f32</span><span>&gt;; 3],
+</span><span>}
+</span><span>
+</span><span style="color:#bfbab0cc;">#</span><span>[</span><span style="color:#ffb454;">binrw</span><span>]
+</span><span style="color:#ff7733;">struct </span><span style="color:#59c2ff;">Quadrilateral </span><span>{
+</span><span>    points</span><span style="color:#bfbab0cc;">:</span><span> [Vec3&lt;</span><span style="color:#ff7733;">f32</span><span>&gt;; 4],
+</span><span>}
+</span></code></pre>
+<p>Rather than typing out a new struct for each coordinate type and number of points, we can also use const generics to create a single generic type <code>Shape</code> .</p>
+<pre data-lang="rust" style="background-color:#0f1419;color:#bfbab0;" class="language-rust "><code class="language-rust" data-lang="rust"><span style="color:#bfbab0cc;">#</span><span>[</span><span style="color:#ffb454;">binrw</span><span>]
+</span><span style="color:#ff7733;">struct </span><span style="color:#59c2ff;">Shape</span><span>&lt;T, </span><span style="color:#ff7733;">const</span><span> N</span><span style="color:#bfbab0cc;">: </span><span style="color:#ff7733;">usize</span><span>&gt;
+</span><span>where
+</span><span>    T: BinRead&lt;Args = ()</span><span style="color:#f29668;">&gt; + </span><span>BinWrite&lt;Args = ()&gt;</span><span style="color:#bfbab0cc;">,
+</span><span>{
+</span><span>    points</span><span style="color:#bfbab0cc;">: </span><span>[Vec3&lt;T&gt;</span><span style="color:#bfbab0cc;">;</span><span> N]</span><span style="color:#bfbab0cc;">,
+</span><span>}
+</span></code></pre>
+<p>Type names with many generic parameters like <code>Shape&lt;i8, 4&gt;</code> can be hard to understand, so we'll create type aliases for recognizable shapes. Composing generic types like this can greatly reduce the amount of code needed to define more complicated types.</p>
+<pre data-lang="rust" style="background-color:#0f1419;color:#bfbab0;" class="language-rust "><code class="language-rust" data-lang="rust"><span style="color:#ff7733;">type </span><span style="color:#59c2ff;">Line </span><span style="color:#f29668;">= </span><span>Shape&lt;</span><span style="color:#ff7733;">f32</span><span>, 2&gt;</span><span style="color:#bfbab0cc;">;
+</span><span style="color:#ff7733;">type </span><span style="color:#59c2ff;">Triangle </span><span style="color:#f29668;">= </span><span>Shape&lt;</span><span style="color:#ff7733;">f64</span><span>, 3&gt;</span><span style="color:#bfbab0cc;">;
+</span><span style="color:#ff7733;">type </span><span style="color:#59c2ff;">Quadrilateral</span><span style="color:#f29668;">&lt;</span><span>T</span><span style="color:#f29668;">&gt; = </span><span>Shape&lt;T, 4&gt;</span><span style="color:#bfbab0cc;">;
+</span><span>
+</span><span style="color:#bfbab0cc;">#</span><span>[</span><span style="color:#ffb454;">binrw</span><span>]
+</span><span style="color:#ff7733;">struct </span><span style="color:#59c2ff;">House2D </span><span>{
+</span><span>    walls</span><span style="color:#bfbab0cc;">: </span><span>Quadrilateral&lt;</span><span style="color:#ff7733;">f64</span><span>&gt;,
+</span><span>    roof</span><span style="color:#bfbab0cc;">:</span><span> Triangle
+</span><span>}
+</span></code></pre>
+
+
+        </div>
+
+        
+        
+    </main>
+
+    
+    <footer>
+        <small class="subtext">
+            <a href="https://jam1.re">jam1garner</a> © 2022
+        </small>
+    </footer>
+
+</body>
+<script>
+    function highlightNav(heading) {
+        let pathname = location.pathname;
+        document.querySelectorAll(".toc a").forEach((item) => {
+            item.classList.remove("active");
+        });
+        document.querySelector(".toc a[href$='" + pathname + "#" + heading + "']").classList.add("active");
+    }
+
+    let currentHeading = "";
+    window.onscroll = function () {
+        let h = document.querySelectorAll("h1,h2,h3,h4,h5,h6");
+        let elementArr = [];
+
+        h.forEach(item => {
+            if (item.id !== "") {
+                elementArr[item.id] = item.getBoundingClientRect().top;
+            }
+        });
+        elementArr.sort();
+        for (let key in elementArr) {
+            if (!elementArr.hasOwnProperty(key)) {
+                continue;
+            }
+            if (elementArr[key] > 0 && elementArr[key] < 300) {
+                if (currentHeading !== key) {
+                    highlightNav(key);
+                    currentHeading = key;
+                }
+                break;
+            }
+        }
+    }
+</script>
+
+</html>

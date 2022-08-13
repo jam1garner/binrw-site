@@ -1,0 +1,248 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <title>binrw</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <style>
+    :root {
+        /* Primary theme color */
+        --primary-color: #386DAD;
+        /* Primary theme text color */
+        --primary-text-color: #FFF;
+        /* Primary theme link color */
+        --primary-link-color: #F9BB2D;
+        /* Secondary color: the background body color */
+        --secondary-color: #fcfaf6;
+        --secondary-text-color: #303030;
+        /* Highlight text color of table of content */
+        --toc-highlight-text-color: #d46e13;
+    }
+
+    .heading-text-dark {
+      font-family: "Fira Sans", sans-serif;
+      font-size: 32px;
+      font-weight: 600;
+      padding: 10px 0 25px 0;
+      color: var(--secondary-text-color);
+    }
+</style>
+
+    <link href="https://fonts.googleapis.com/css?family=Alfa+Slab+One&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css?family=Fira+Sans:400,500,600&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="/normalize.css">
+    <link rel="stylesheet" href="https://binrw.rs/juice.css">
+    
+    <link rel="stylesheet" href="https://binrw.rs/text.css">
+
+</head>
+
+<body>
+    
+
+    <header class="pos-absolute" style="background-color: transparent">
+        
+
+<a href="https:&#x2F;&#x2F;binrw.rs&#x2F;">
+    <div class="logo">
+        <img src="https://binrw.rs/binrw.svg" alt="logo">
+        binrw
+    </div>
+</a>
+
+<nav>
+    
+    <a class="nav-item subtitle-text" href="https:&#x2F;&#x2F;binrw.rs&#x2F;tutorial&#x2F;">Tutorial</a>
+    
+    <a class="nav-item subtitle-text" href="https:&#x2F;&#x2F;binrw.rs&#x2F;community&#x2F;">Community&#x2F;Showcase</a>
+    
+    
+        
+        <a class="nav-item subtitle-text" href="https:&#x2F;&#x2F;docs.rs&#x2F;binrw">Documentation</a>
+        
+        <a class="nav-item subtitle-text" href="https:&#x2F;&#x2F;github.com&#x2F;jam1garner&#x2F;binrw">Github</a>
+        
+    
+</nav>
+
+    </header>
+
+    <div class="hero">
+        
+<script async defer src="https://buttons.github.io/buttons.js"></script>
+<section class="text-center">
+    <h1 class="heading-text" style="font-size: 50px">
+        Read and Write Data With Declarative ✨Macro&nbsp;Magic✨
+    </h1>
+    <h3 class="title-text">
+        <b>binrw</b> makes binary parsers and serializers easy to write, read, and maintain.
+    </h3>
+    <div>
+        <a class="github-button" href="https://github.com/jam1garner/binrw" data-size="large" data-show-count="true"
+           aria-label="Star binrw on GitHub">Star</a>
+        <a class="github-button" href="https://github.com/jam1garner/binrw/fork" data-size="large"
+           data-show-count="true" aria-label="Fork jam1garner/binrw on GitHub">Fork</a>
+    </div>
+</section>
+<img class="hero-image" style="width: 50%" src="https://binrw.rs/binrw.svg">
+
+<div class="explore-more text"
+    onclick="document.getElementById('features').scrollIntoView({behavior: 'smooth'})">
+    Explore More ⇩
+</div>
+<style>
+    .hero section {
+        padding: 0 5rem;
+    }
+    @media screen and (max-width: 768px) {
+        .hero section {
+            padding: 0 2rem;
+        }
+
+        .hero-image {
+            display: none
+        }
+    }
+</style>
+
+    </div>
+
+    
+
+    <main>
+        
+        
+        
+        
+        
+        <div class="toc">
+            <div class="toc-sticky">
+                
+                <div class="toc-item">
+                    <a class="subtext" href="https://binrw.rs/#binrw">binrw</a>
+                </div>
+                
+                
+                <div class="toc-item-child">
+                    <a class="subtext" href="https://binrw.rs/#declarative"><small>- Declarative</small></a>
+                </div>
+                
+                <div class="toc-item-child">
+                    <a class="subtext" href="https://binrw.rs/#powerful"><small>- Powerful</small></a>
+                </div>
+                
+                <div class="toc-item-child">
+                    <a class="subtext" href="https://binrw.rs/#composable"><small>- Composable</small></a>
+                </div>
+                
+                <div class="toc-item-child">
+                    <a class="subtext" href="https://binrw.rs/#safe-efficient-and-embedded-compatible"><small>- Safe, Efficient and Embedded-Compatible</small></a>
+                </div>
+                
+                
+                
+            </div>
+        </div>
+        
+        
+
+        <div class="content text">
+            
+<div id="features" class="heading-text-dark">Overview</div>
+<h1 id="binrw">binrw</h1>
+<h2 id="declarative">Declarative</h2>
+<p>Skip the boilerplate. Declaring a type is all you need.</p>
+<pre data-lang="rust" style="background-color:#0f1419;color:#bfbab0;" class="language-rust "><code class="language-rust" data-lang="rust"><span style="color:#bfbab0cc;">#</span><span>[</span><span style="color:#ffb454;">derive</span><span>(BinRead</span><span style="color:#bfbab0cc;">,</span><span> BinWrite)]
+</span><span style="color:#bfbab0cc;">#</span><span>[</span><span style="color:#ffb454;">brw</span><span>(little</span><span style="color:#bfbab0cc;">,</span><span> magic </span><span style="color:#f29668;">= </span><span style="color:#ff7733;">b</span><span style="color:#c2d94c;">&quot;PK&quot;</span><span>)]
+</span><span style="color:#ff7733;">struct </span><span style="color:#59c2ff;">ZipHeader </span><span>{
+</span><span>    version</span><span style="color:#bfbab0cc;">: </span><span style="color:#ff7733;">u16</span><span>,
+</span><span>    flags</span><span style="color:#bfbab0cc;">: </span><span style="color:#ff7733;">u16</span><span>,
+</span><span>    comp_type</span><span style="color:#bfbab0cc;">:</span><span> CompressionType,
+</span><span>    </span><span style="font-style:italic;color:#5c6773;">// ...
+</span><span>}
+</span><span>
+</span><span style="color:#bfbab0cc;">#</span><span>[</span><span style="color:#ffb454;">derive</span><span>(BinRead</span><span style="color:#bfbab0cc;">,</span><span> BinWrite)]
+</span><span style="color:#bfbab0cc;">#</span><span>[</span><span style="color:#ffb454;">brw</span><span>(</span><span style="color:#ffb454;">repr</span><span>(u16))]
+</span><span style="color:#ff7733;">enum </span><span style="color:#59c2ff;">CompressionType </span><span>{
+</span><span>    </span><span style="font-style:italic;color:#39bae6;">None </span><span style="color:#f29668;">= </span><span style="color:#f29718;">0</span><span style="color:#bfbab0cc;">,
+</span><span>    Shrunk </span><span style="color:#f29668;">= </span><span style="color:#f29718;">1</span><span style="color:#bfbab0cc;">,
+</span><span>    Deflated </span><span style="color:#f29668;">= </span><span style="color:#f29718;">8</span><span style="color:#bfbab0cc;">,
+</span><span>    Lzma </span><span style="color:#f29668;">= </span><span style="color:#f29718;">14</span><span style="color:#bfbab0cc;">,
+</span><span>}
+</span></code></pre>
+<p>Simple definitions and easy-to-read by design to improve maintainability and approachability.</p>
+<h2 id="powerful">Powerful</h2>
+<p>Directives in attributes handle common binary parsing tasks like matching magic numbers, byte ordering, padding, alignment, data validation, and more.</p>
+<pre data-lang="rust" style="background-color:#0f1419;color:#bfbab0;" class="language-rust "><code class="language-rust" data-lang="rust"><span style="color:#bfbab0cc;">#</span><span>[</span><span style="color:#ffb454;">derive</span><span>(BinRead)]
+</span><span style="color:#ff7733;">struct </span><span style="color:#59c2ff;">StringTable </span><span>{
+</span><span>    entry_count</span><span style="color:#bfbab0cc;">: </span><span style="color:#ff7733;">u32</span><span>,
+</span><span>    </span><span style="color:#bfbab0cc;">#</span><span>[</span><span style="color:#ffb454;">br</span><span>(count </span><span style="color:#f29668;">=</span><span> entry_count)]
+</span><span>    entries</span><span style="color:#bfbab0cc;">: </span><span style="font-style:italic;color:#39bae6;">Vec</span><span>&lt;NullString&gt;,
+</span><span>}
+</span></code></pre>
+<h2 id="composable">Composable</h2>
+<p>With support for generics, custom parsers, and mapping functions, you can create your own building blocks as reusable types. And to keep you from reinventing the wheel we already include types you'll likely need:</p>
+<ul>
+<li>Null-terminated strings (UTF-8 and UTF-16)</li>
+<li>Types for representing data indirection via file offsets</li>
+<li>Implementations for Vecs, Tuples, Arrays, and other standard Rust types</li>
+</ul>
+<h2 id="safe-efficient-and-embedded-compatible">Safe, Efficient and Embedded-Compatible</h2>
+<ul>
+<li>Zero unsafe code</li>
+<li>Out of the box <code>no_std</code> and Web Assembly support</li>
+<li>Takes advantage of Rust's speed and safety</li>
+</ul>
+
+
+        </div>
+
+        
+        
+    </main>
+
+    
+    <footer>
+        <small class="subtext">
+            <a href="https://jam1.re">jam1garner</a> © 2022
+        </small>
+    </footer>
+
+</body>
+<script>
+    function highlightNav(heading) {
+        let pathname = location.pathname;
+        document.querySelectorAll(".toc a").forEach((item) => {
+            item.classList.remove("active");
+        });
+        document.querySelector(".toc a[href$='" + pathname + "#" + heading + "']").classList.add("active");
+    }
+
+    let currentHeading = "";
+    window.onscroll = function () {
+        let h = document.querySelectorAll("h1,h2,h3,h4,h5,h6");
+        let elementArr = [];
+
+        h.forEach(item => {
+            if (item.id !== "") {
+                elementArr[item.id] = item.getBoundingClientRect().top;
+            }
+        });
+        elementArr.sort();
+        for (let key in elementArr) {
+            if (!elementArr.hasOwnProperty(key)) {
+                continue;
+            }
+            if (elementArr[key] > 0 && elementArr[key] < 300) {
+                if (currentHeading !== key) {
+                    highlightNav(key);
+                    currentHeading = key;
+                }
+                break;
+            }
+        }
+    }
+</script>
+
+</html>
