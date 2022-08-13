@@ -1,6 +1,6 @@
 # binrw-site
 
-The WIP website for [binrw](https://github.com/jam1garner/binrw). Soon to be up at http://binrw.rs
+The website for [binrw](https://github.com/jam1garner/binrw), up at http://binrw.rs
 
 ## Build
 
