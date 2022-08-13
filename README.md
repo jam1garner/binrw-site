@@ -1,6 +1,6 @@
 # binrw-site
 
-The website for [binrw](https://github.com/jam1garner/binrw), up at http://binrw.rs
+The website for [binrw](https://github.com/jam1garner/binrw), up at https://binrw.rs
 
 ## Build
 
